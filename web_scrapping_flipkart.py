@@ -1,17 +1,39 @@
 import requests
-import pandas as pd
 from bs4 import BeautifulSoup
+import pandas as pd
 import re
+import time
+import pymysql
+
+
+# ---------------- CONFIG ----------------
+BASE_URL = "https://www.flipkart.com/search"
+QUERY = "television"
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0",
+    "Referer": "https://www.flipkart.com/"
+}
+# ---------------------------------------
 
 
 def get_soup(url):
-    headers = {"User-Agent": "Mozilla/5.0"}
-    response = requests.get(url, headers=headers, timeout=10)
+    response = requests.get(url, headers=HEADERS, timeout=10)
     return BeautifulSoup(response.text, "html.parser")
+
+
+def clean_price(price_text):
+    digits = re.sub(r"[^\d]", "", price_text)
+    return int(digits) if digits else None
+
+
+def extract_inches(text):
+    match = re.search(r'(\d{2})\s*(inch|")', text.lower())
+    return match.group(1) if match else "N/A"
+
 
 def extract_panel_type(text):
     text = text.lower()
-
     if "qled" in text:
         return "QLED"
     elif "oled" in text:
@@ -20,70 +42,85 @@ def extract_panel_type(text):
         return "Mini LED"
     elif "led" in text:
         return "LED"
-    else:
-        return "Unknown"
-    
+    return "Unknown"
+
+
+def extract_os(text):
+    text = text.lower()
+    if "google tv" in text:
+        return "Google TV"
+    elif "android" in text:
+        return "Android TV"
+    elif "webos" in text:
+        return "WebOS"
+    elif "tizen" in text:
+        return "Tizen"
+    elif "vidaa" in text:
+        return "VIDAA"
+    return "Other"
+
+
 def scrape_one_page(soup, data):
-    box = soup.find("div", class_="QSCKDh dLgFEE")
-    if box is None:
+    grid = soup.find("div", class_="QSCKDh dLgFEE")
+    if not grid:
         return 0
 
-    names = box.find_all("div", class_="RG5Slk")
-    prices = box.find_all("div", class_="hZ3P6w DeU9vF")
-    ratings = box.find_all("div", class_="MKiFS6")
+    names = grid.find_all("div", class_="RG5Slk")
+    prices = grid.find_all("div", class_="hZ3P6w DeU9vF")
+    ratings = grid.find_all("div", class_="MKiFS6")
 
-    max_len = max(len(names), len(prices), len(ratings))
+    total_items = max(len(names), len(prices), len(ratings))
+    count = 0
 
-    for i in range(max_len):
+    for i in range(total_items):
+
         if i < len(names):
             full_name = names[i].text.strip()
-            lower_name = full_name.lower()
 
-            # BRAND
-            brand = full_name.split()[0]
+            if full_name:
+                parts = full_name.split()
+                brand = parts[0]
+                model = full_name.replace(brand, "").strip()
 
-            # INCHES
-            inch_match = re.search(r'(\d{2})\s*(inch|")', lower_name)
-            inches = inch_match.group(1) if inch_match else "N/A"
+                inches = extract_inches(full_name)
+                panel_type = extract_panel_type(full_name)
+                operating_system = extract_os(full_name)
+                smart_tv = "Yes" if "smart" in full_name.lower() else "No"
 
-            #  PANEL TYPE
-            panel_type = extract_panel_type(lower_name)
-
-            #  LAUNCH YEAR
-            year_match = re.search(r'(20[1-2][0-9])', full_name)
-            launch_year = year_match.group(1) if year_match else "N/A"
-
-            #  MODEL
-            model = full_name
-            model = model.replace(brand, "")
-            if inch_match:
-                model = model.replace(inch_match.group(0), "")
-            if year_match:
-                model = model.replace(launch_year, "")
-            model = model.replace(panel_type, "").strip()
-
+                year_match = re.search(r'(20[1-2][0-9])', full_name)
+                launch_year = year_match.group(1) if year_match else "N/A"
+            else:
+                brand = model = inches = panel_type = operating_system = smart_tv = launch_year = "N/A"
         else:
-            brand = model = inches = panel_type = launch_year = "N/A"
+            brand = model = inches = panel_type = operating_system = smart_tv = launch_year = "N/A"
+
+        price = clean_price(prices[i].text) if i < len(prices) else None
+        rating = ratings[i].text.strip() if i < len(ratings) else "0"
 
         data.append({
             "brand": brand,
             "model": model,
             "inches": inches,
             "panel_type": panel_type,
+            "smart_tv": smart_tv,
+            "operating_system": operating_system,
             "launch_year": launch_year,
-            "price": prices[i].text.strip() if i < len(prices) else "N/A",
-            "rating": ratings[i].text.strip() if i < len(ratings) else "0"
+            "price": price,
+            "rating": rating
         })
 
-    return max_len
+        count += 1
 
-def scrape_flipkart_all_pages():
+    return count
+
+
+def scrape_flipkart_tvs():
     data = []
     page = 1
 
     while True:
         print(f"Scraping page {page}")
-        url = f"https://www.flipkart.com/search?q=television&page={page}"
+        url = f"{BASE_URL}?q={QUERY}&page={page}"
         soup = get_soup(url)
 
         count = scrape_one_page(soup, data)
@@ -91,13 +128,50 @@ def scrape_flipkart_all_pages():
             break
 
         page += 1
+        time.sleep(1.5)
 
     return pd.DataFrame(data)
 
-df = scrape_flipkart_all_pages()
+
+# ---------------- RUN ----------------
+df = scrape_flipkart_tvs()
+
+df.drop_duplicates(subset=["brand", "model", "price"], inplace=True)
 
 print(df.head())
-print("Total products scraped:", len(df))
+print("Total TVs scraped:", len(df))
 
-df.to_csv("C:/sudheerpy/flipkart_televisions_clean.csv", index=False)
-print("CSV file saved successfully")    
+# MySQL connection
+conn = pymysql.connect(
+    host="localhost",
+    user="root",
+    password="Sudheer@16159",
+    database="flipkart_ref"
+)
+
+cursor = conn.cursor()
+
+insert_query = """
+INSERT IGNORE INTO flipkart_televisions
+(brand, model, inches, panel_type, smart_tv,
+ operating_system, launch_year, price, rating)
+VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+"""
+
+for _, row in df.iterrows():
+    cursor.execute(insert_query, (
+        row["brand"],
+        row["model"],
+        row["inches"] if row["inches"] != "N/A" else None,
+        row["panel_type"],
+        row["smart_tv"],
+        row["operating_system"],
+        row["launch_year"] if row["launch_year"] != "N/A" else None,
+        row["price"],
+        row["rating"]
+    ))
+
+conn.commit()
+conn.close()
+
+print("Data inserted successfully into MySQL")
