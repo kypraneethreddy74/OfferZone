@@ -1,119 +1,210 @@
-import pandas as pd
 import requests
+import mysql.connector
 from bs4 import BeautifulSoup as bs
-import time
+import time, re, random, math
+from datetime import datetime
 
-# 1. Initialize Lists
-brand_list, title_list, model_list, year_list = [], [], [], []
-selling_list, original_list, discount_list = [], [], []
-rating_val_list, rating_count_list, review_count_list, url_list = [], [], [], []
+# MYSQL CONNECTION
 
-# Set how many pages you want to scrape (e.g., 1 to 10)
-# To get ALL pages, look at the bottom of Flipkart; usually it's around 40-50.
-total_pages = 2
+def get_mysql_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="Kpkr@153",
+        database="offerzone",
+        autocommit=True
+    )
 
-print(f"Starting scraper for {total_pages} pages...")
+# USER AGENTS
 
-for page in range(1, total_pages + 1):
-    print(f"Scraping Page: {page}...")
-    
-    # Update URL dynamically with the page number
-    url = f"https://www.flipkart.com/search?q=tv&page={page}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+    "Mozilla/5.0 (X11; Linux x86_64)",
+    "Mozilla/5.0 (Windows NT 10.0; rv:122.0) Gecko/20100101 Firefox/122.0",
+]
+
+def get_headers():
+    return {
+        "User-Agent": random.choice( USER_AGENTS ),
+        "Accept-Language": "en-US,en;q=0.9",
     }
 
-    try:
-        r = requests.get(url, headers=headers)
-        soup = bs(r.text, "lxml")
+# PRICE RANGES 
 
-        # 2. Find all product card containers
-        product_cards = soup.find_all("div", class_="nZIRY7")
+PRICE_RANGES = [
+    ( "0-14999", 0, 14999 ),
+    ( "15000-22999", 15000, 22999 ),
+    ( "23000-29999", 23000, 29999 ),
+    ( "30000-39999", 30000, 39999 ),
+    ( "40000-49999", 40000, 49999 ),
+    ( "50000-59999", 50000, 59999 ),
+    ( "60000+", 60000, "Max" ),
+]
 
-        # If no cards are found, we might have hit the end or been blocked
-        if not product_cards:
-            print("No more products found or blocked. Stopping.")
-            break
+# HELPERS
 
-        for card in product_cards:
-            # --- PRODUCT TITLE & BRAND ---
-            title_tag = card.find("div", class_="RG5Slk")
-            name = title_tag.get_text(strip=True) if title_tag else "N/A"
-            title_list.append(name)
-            brand_list.append(name.split()[0] if name != "N/A" else "N/A")
+def build_url( min_p, max_p, page ):
 
-            # --- URL ---
-            link_tag = card.find("a", class_="k7wcnx")
-            if link_tag and link_tag.get('href'):
-                url_list.append("https://www.flipkart.com" + link_tag['href'])
-            else:
-                url_list.append("N/A")
+    base = (
+        "https://www.flipkart.com/search?q=tv"
+        "&otracker=search&otracker1=search"
+        "&marketplace=FLIPKART&as-show=on&as=off"
+        "&sort=price_asc"
+    )
+    base += f"&p%5B%5D=facets.price_range.from%3D{ min_p }"
+    base += f"&p%5B%5D=facets.price_range.to%3D{ max_p }"
+    base += f"&page={ page }"
+    return base
 
-            # --- MODEL ID & LAUNCH YEAR ---
-            m_id, l_year = "N/A", "N/A"
-            ul_tag = card.find("ul", class_="HwRTzP")
-            if ul_tag:
-                li_tags = ul_tag.find_all("li", class_="DTBslk")
-                for li in li_tags:
-                    text = li.get_text(strip=True)
-                    if "Model ID" in text:
-                        m_id = text.replace("Model ID:", "").strip()
-                    if "Launch Year" in text:
-                        l_year = text.replace("Launch Year:", "").strip()
-            model_list.append(m_id)
-            year_list.append(l_year)
+def smart_delay( base = 2, end = 2 ):
+    time.sleep( base + random.uniform( 0, end ) )
 
-            # --- PRICES & DISCOUNT ---
-            sp = card.find("div", class_="hZ3P6w")
-            op = card.find("div", class_="kRYCnD")
-            dp = card.find("div", class_="HQe8jr")
-            
-            selling_list.append(sp.get_text(strip=True).replace("₹", "").replace(",", "") if sp else "0")
-            original_list.append(op.get_text(strip=True).replace("₹", "").replace(",", "") if op else "0")
-            discount_list.append(dp.get_text(strip=True).replace("off", "").strip() if dp else "0%")
+def fetch_page( session, url, retries=5 ):
+    for i in range( retries ):
+        try:
+            r = session.get( url, headers = get_headers(), timeout=30 )
+            if r.status_code == 200:
+                return r
+            if r.status_code == 429:
+                time.sleep( (2 ** i) * 3)
+        except:
+            time.sleep( (2 ** i) * 2)
+    return None
 
-            # --- RATINGS & REVIEWS ---
-            rv = card.find("div", class_="MKiFS6")
-            rating_val_list.append(rv.get_text(strip=True) if rv else "0")
+def get_total_products_and_pages( soup, per_page = 24 ):
+    span = soup.find( "span", class_ = "_Omnvo" )
+    if not span:
+        return None, None
+    text = span.get_text( " ", strip = True )
+    m = re.search( r"of\s+([\d,]+)\s+results", text )
+    if not m:
+        return None, None
+    total_products = int( m.group(1).replace( ",", "" ) )
+    total_pages = math.ceil( total_products / per_page )
+    return total_products, total_pages
 
-            rb = card.find("span", class_="PvbNMB")
-            if rb:
-                clean_text = rb.get_text(strip=True).replace(",", "")
-                parts = clean_text.split('&')
-                r_count = parts[0].strip().split()[0] if len(parts) > 0 else "0"
-                rev_count = parts[1].strip().split()[0] if len(parts) > 1 else "0"
-                rating_count_list.append(r_count)
-                review_count_list.append(rev_count)
-            else:
-                rating_count_list.append("0")
-                review_count_list.append("0")
-        
-        # 3. Wait a second before next page to be polite to the server
-        time.sleep(1)
+def scrape_page_until_valid( session, url, expected_count, max_retry=6 ):
+    for _ in range( max_retry ):
+        r = fetch_page( session, url )
+        if not r:
+            continue
+        soup = bs( r.text, "lxml" )
+        cards = soup.find_all( "div", class_="nZIRY7" )
+        if len(cards) == expected_count:
+            return soup, cards
+        smart_delay( 3, 2 )
+    return soup, cards
 
-    except Exception as e:
-        print(f"An error occurred on page {page}: {e}")
-        break
+def extract_pid( url ):
+    m = re.search( r'pid=([A-Z0-9]+)', url )
+    return m.group(1) if m else None
 
-# 4. Create DataFrame
-df = pd.DataFrame({
-    "brand": brand_list,
-    "product_name": title_list,
-    "model_id": model_list,
-    "launch_year": year_list,
-    "selling_price": selling_list,
-    "original_price": original_list,
-    "discount_percent": discount_list,
-    "rating_value": rating_val_list,
-    "rating_count": rating_count_list,
-    "review_count": review_count_list,
-    "product_url": url_list
-})
+# SCRAPER
 
-# 5. Export to CSV
-df.to_csv("flipkart_all_tvs.csv", index=False)
+session = requests.Session()
+session.get( "https://www.flipkart.com", headers=get_headers() )
+smart_delay( 2, 1 )
 
-print("-" * 30)
-print(f"Scraping Complete!")
-print(f"Total products saved: {len(df)}")
-print("-" * 30)
+conn = get_mysql_connection()
+cursor = conn.cursor()
+
+insert_sql = """
+INSERT INTO flipkart_products (
+    platform, platform_product_id,
+    brand, product_name, model_id, launch_year,
+    selling_price, original_price, discount_percent,
+    rating_value, rating_count,
+    product_url, image_url, scraped_at
+) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+"""
+
+for label, min_p, max_p in PRICE_RANGES:
+
+    print( f"\nScraping ₹{label}" )
+
+    first_url = build_url( min_p, max_p, 1 )
+    r = fetch_page( session, first_url )
+    if not r:
+        continue
+
+    soup = bs( r.text, "lxml" )
+    total_products, total_pages = get_total_products_and_pages( soup )
+    if not total_pages:
+        continue
+
+    print( f"Pages (approx): {total_pages}" )
+
+    for page in range( 1, total_pages + 1 ):
+
+        url = build_url( min_p, max_p, page )
+
+        if page < total_pages:
+            soup, cards = scrape_page_until_valid( session, url, 24 )
+        else:
+            r = fetch_page( session, url )
+            soup = bs( r.text, "lxml" )
+            cards = soup.find_all( "div", class_ = "nZIRY7" )
+
+        print(f"Page {page}: {len(cards)} products")
+
+        for card in cards:
+
+            title = card.find( "div", class_="RG5Slk" )
+            name = title.get_text( strip = True ) if title else None
+            brand = name.split()[0] if name and name.split() else None
+
+            link = card.find( "a", class_ = "k7wcnx" )
+            product_url = "https://www.flipkart.com" + link["href"] if link else None
+            pid = extract_pid( product_url )
+
+            img = card.find( "img", class_ = "UCc1lI" )
+            image_url = img["src"] if img else None
+
+            model, year = None, None
+            specs = card.find( "div", class_ = "CMXw7N" )
+            if specs:
+                for li in specs.find_all( "li" ):
+                    txt = li.get_text( strip = True )
+                    if "Model ID" in txt:
+                        m = re.search( r"Model\s*ID[:\s]*(.+)", txt )
+                        if m: model = m.group(1)
+                    if "Launch Year" in txt:
+                        y = re.search( r"(\d{4})", txt )
+                        if y: year = y.group(1)
+
+            sp = card.find( "div", class_ = "hZ3P6w" )
+            selling_price = int( sp.get_text( strip = True ).replace( "₹","" ).replace( ",","" )) if sp else 0
+
+            op = card.find( "div", class_ = "kRYCnD" )
+            original_price = int( op.get_text( strip = True ).replace( "₹","" ).replace( ",","" )) if op else 0
+
+            dp = card.find( "div", class_ = "HQe8jr" )
+            discount = int( re.sub(r"\D", "", dp.get_text())) if dp else 0
+
+            rv = card.find( "div", class_ = "MKiFS6" )
+            rating_value = float( rv.get_text() ) if rv else 0
+
+            rc = card.find( "div", class_ = "a7saXW" )
+            rating_count = int(re.sub( r"\D", "", rc.get_text())) if rc else 0
+
+            cursor.execute(
+                insert_sql,
+                (
+                    "flipkart", pid,
+                    brand, name, model, year,
+                    selling_price, original_price, discount,
+                    rating_value, rating_count,
+                    product_url, image_url,
+                    datetime.now()
+                )
+            )
+
+        smart_delay( 2, 1 )
+
+    smart_delay( 5, 3 )
+
+cursor.close()
+conn.close()
+
+print( "\nSCRAPING COMPLETED" )
