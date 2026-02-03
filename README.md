@@ -282,3 +282,7 @@ npm install recharts  -- froentend
 
 cd frontend
 npm install recharts react-router-dom
+
+
+<img width="1919" height="1020" alt="image" src="https://github.com/user-attachments/assets/82cb21e9-990d-451f-bbcf-d7f1be195efa" />
+
