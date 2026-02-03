@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "axios": "^1.13.2",
+    "bootstrap-icons": "^1.13.1",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.0.0",
+    "powerbi-client": "^2.23.9",
+    "powerbi-client-react": "^2.0.0",
+    "recharts": "^3.6.0"
+  }
+}

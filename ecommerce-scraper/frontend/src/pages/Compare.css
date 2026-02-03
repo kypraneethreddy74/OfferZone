@@ -1,0 +1,96 @@
+/* =============================
+   PAGE
+============================= */
+.container {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* =============================
+   TITLE
+============================= */
+.container h4 {
+  color: #9a3412 !important; /* dark orange */
+  font-weight: 700;
+}
+
+/* =============================
+   SEARCH INPUT
+============================= */
+input.form-control {
+  border: 1px solid #fed7aa !important;
+  border-radius: 6px;
+}
+
+input.form-control:focus {
+  border-color: #f97316 !important;
+  box-shadow: 0 0 0 0.15rem rgba(249, 115, 22, 0.25) !important;
+}
+
+/* =============================
+   SEARCH BUTTON
+============================= */
+button.btn-primary {
+  background-color: #f97316 !important;
+  border-color: #f97316 !important;
+  font-weight: 600;
+}
+
+button.btn-primary:hover {
+  background-color: #ea580c !important;
+  border-color: #ea580c !important;
+}
+
+/* =============================
+   EMPTY STATE
+============================= */
+.text-muted {
+  color: #6b7280 !important;
+}
+
+/* =============================
+   LIST GROUP
+============================= */
+.list-group {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.list-group-item {
+  border: 1px solid #ffedd5 !important;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.list-group-item:not(:last-child) {
+  border-bottom: none;
+}
+
+.list-group-item-action:hover {
+  background-color: #fff7ed !important;
+  box-shadow: inset 4px 0 0 #f97316 !important;
+}
+
+/* =============================
+   PRODUCT TEXT
+============================= */
+.list-group-item .fw-semibold {
+  color: #111827;
+}
+
+.list-group-item small {
+  color: #6b7280;
+}
+
+/* =============================
+   PRICE
+============================= */
+.text-success {
+  color: #15803d !important;
+  font-weight: 700;
+}
+
+/* =============================
+   PLATFORM LOGO
+============================= */
+.list-group-item img {
+  object-fit: contain;
+}

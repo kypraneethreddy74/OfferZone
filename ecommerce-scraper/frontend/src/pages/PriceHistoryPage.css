@@ -1,0 +1,570 @@
+/* ===============================
+   ORANGE THEME - PRICE HISTORY PAGE
+================================= */
+
+.price-history-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff7ed, #fff);
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ===============================
+   HEADER
+================================= */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 20px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(255, 140, 0, 0.12);
+  border: 1px solid rgba(255, 153, 0, 0.2);
+  margin-bottom: 18px;
+}
+
+.back-btn {
+  background: #ff7a00;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 6px 14px rgba(255, 122, 0, 0.25);
+}
+
+.back-btn:hover {
+  background: #ff5c00;
+  transform: translateY(-2px);
+}
+
+.header-content h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #ff6a00;
+}
+
+.product-name {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* ===============================
+   PRODUCT INFO BAR
+================================= */
+.product-info-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(255, 140, 0, 0.12);
+  border: 1px solid rgba(255, 153, 0, 0.2);
+  margin-bottom: 18px;
+}
+
+.product-thumb {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 153, 0, 0.3);
+  background: #fff7ed;
+  padding: 8px;
+}
+
+.product-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.brand-badge {
+  background: linear-gradient(90deg, #ff7a00, #ff9900);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(255, 122, 0, 0.25);
+}
+
+.model-id,
+.platforms-count {
+  font-size: 13px;
+  color: #444;
+  font-weight: 600;
+}
+
+/* ===============================
+   TABS
+================================= */
+.tabs-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 153, 0, 0.3);
+  background: #fff;
+  color: #ff6a00;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.1);
+}
+
+.tab-btn:hover {
+  transform: translateY(-2px);
+  background: #fff7ed;
+}
+
+.tab-btn.active {
+  background: linear-gradient(90deg, #ff7a00, #ff9900);
+  color: #fff;
+  border: none;
+  box-shadow: 0 8px 18px rgba(255, 122, 0, 0.3);
+}
+
+/* ===============================
+   TIME RANGE SELECTOR
+================================= */
+.time-range-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 15px;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 153, 0, 0.2);
+  box-shadow: 0 6px 18px rgba(255, 140, 0, 0.12);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.time-range-selector .label {
+  font-weight: 800;
+  color: #ff6a00;
+}
+
+.time-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.time-buttons button {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 153, 0, 0.3);
+  background: #fff7ed;
+  color: #ff6a00;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.time-buttons button:hover {
+  background: #ffe8d2;
+  transform: translateY(-2px);
+}
+
+.time-buttons button.active {
+  background: linear-gradient(90deg, #ff7a00, #ff9900);
+  color: white;
+  border: none;
+  box-shadow: 0 6px 14px rgba(255, 122, 0, 0.25);
+}
+
+/* ===============================
+   CONTENT STATES
+================================= */
+.loading-container,
+.error-container,
+.no-data-container {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 14px;
+  text-align: center;
+  border: 1px solid rgba(255, 153, 0, 0.2);
+  box-shadow: 0 6px 18px rgba(255, 140, 0, 0.12);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 153, 0, 0.2);
+  border-top: 4px solid #ff7a00;
+  margin: 0 auto 12px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-container .error-icon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.error-container button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #ff7a00;
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.error-container button:hover {
+  background: #ff5c00;
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   CHART GRID
+================================= */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 18px;
+}
+
+/* ===============================
+   PLATFORM CHART CARD
+================================= */
+.platform-chart-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 153, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(255, 140, 0, 0.12);
+  overflow: hidden;
+  transition: 0.25s;
+}
+
+.platform-chart-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 35px rgba(255, 140, 0, 0.18);
+}
+
+.platform-header {
+  padding: 14px 16px;
+  border-left: 6px solid #ff7a00;
+  background: linear-gradient(90deg, rgba(255, 122, 0, 0.1), rgba(255, 153, 0, 0.03));
+}
+
+.platform-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ff6a00;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.platform-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ===============================
+   STATS BAR
+================================= */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 14px 16px;
+}
+
+.stat {
+  background: #fff7ed;
+  border: 1px solid rgba(255, 153, 0, 0.25);
+  padding: 12px;
+  border-radius: 14px;
+  text-align: center;
+  transition: 0.25s;
+}
+
+.stat:hover {
+  background: #ffe8d2;
+}
+
+.stat .label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ff6a00;
+  margin-bottom: 5px;
+}
+
+.stat .value {
+  font-size: 15px;
+  font-weight: 900;
+  color: #222;
+}
+
+/* ===============================
+   CHART WRAPPER
+================================= */
+.chart-wrapper {
+  padding: 10px 10px 0px;
+}
+
+.chart-wrapper.large {
+  padding: 12px 12px 0px;
+}
+
+/* ===============================
+   TOOLTIP
+================================= */
+.chart-tooltip {
+  background: white;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 153, 0, 0.25);
+  box-shadow: 0 10px 25px rgba(255, 140, 0, 0.2);
+  min-width: 160px;
+}
+
+.tooltip-platform {
+  font-weight: 900;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.tooltip-date {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.tooltip-price {
+  font-size: 14px;
+  font-weight: 900;
+  color: #111;
+}
+
+/* ===============================
+   CHART FOOTER
+================================= */
+.chart-footer {
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #666;
+  border-top: 1px solid rgba(255, 153, 0, 0.18);
+  background: #fffaf5;
+}
+
+/* ===============================
+   BEST PRICE SECTION
+================================= */
+.best-price-section {
+  display: grid;
+  gap: 18px;
+}
+
+.best-price-card,
+.platform-summary-card,
+.price-alert-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 153, 0, 0.2);
+  box-shadow: 0 10px 25px rgba(255, 140, 0, 0.12);
+  overflow: hidden;
+}
+
+.best-price-header {
+  padding: 16px;
+  background: linear-gradient(90deg, rgba(255, 122, 0, 0.1), rgba(255, 153, 0, 0.03));
+}
+
+.best-price-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: #ff6a00;
+}
+
+.best-price-header p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #555;
+  font-weight: 600;
+}
+
+/* ===============================
+   PLATFORM BADGE
+================================= */
+.platform-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ===============================
+   PLATFORM COMPARISON
+================================= */
+.platform-summary-card {
+  padding: 16px;
+}
+
+.platform-summary-card h3 {
+  margin: 0 0 12px;
+  color: #ff6a00;
+  font-weight: 900;
+}
+
+.platform-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.platform-summary-item {
+  background: #fff7ed;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255, 153, 0, 0.2);
+  transition: 0.25s;
+}
+
+.platform-summary-item:hover {
+  background: #ffe8d2;
+  transform: translateY(-2px);
+}
+
+.platform-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+  color: #ff6a00;
+  padding-left: 10px;
+  border-left: 5px solid #ff7a00;
+  margin-bottom: 10px;
+}
+
+.platform-name .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.platform-prices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.price-item {
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid rgba(255, 153, 0, 0.15);
+}
+
+.price-item .label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  font-weight: 700;
+}
+
+.price-item .value {
+  display: block;
+  font-weight: 900;
+  color: #111;
+  margin-top: 4px;
+}
+
+/* ===============================
+   PRICE ALERT CARD
+================================= */
+.price-alert-card {
+  padding: 16px;
+}
+
+.price-alert-card h3 {
+  margin: 0 0 8px;
+  color: #ff6a00;
+  font-weight: 900;
+}
+
+.price-alert-card p {
+  margin: 0 0 14px;
+  color: #555;
+  font-weight: 600;
+}
+
+.alert-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.alert-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 153, 0, 0.35);
+  outline: none;
+  font-weight: 700;
+}
+
+.alert-form input:focus {
+  border-color: #ff7a00;
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.2);
+}
+
+.set-alert-btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #ff7a00, #ff9900);
+  color: white;
+  border: none;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 8px 18px rgba(255, 122, 0, 0.28);
+}
+
+.set-alert-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, #ff5c00, #ff7a00);
+}
+
+.header-content {
+  flex: 1; /* This makes the title container take up all available space */
+  text-align: left; /* Ensures text stays left within that space */
+}
+

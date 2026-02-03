@@ -1,0 +1,42 @@
+{
+  "name": "offerzone-frontend",
+  "version": "2.0.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^1.6.5",
+    "bootstrap": "^5.3.2",
+    "bootstrap-icons": "^1.13.1",
+    "plotly.js": "^3.3.1",
+    "powerbi-client": "^2.23.9",
+    "powerbi-client-react": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-plotly.js": "^2.6.0",
+    "react-router-dom": "^6.30.3",
+    "react-scripts": "5.0.1",
+    "recharts": "^2.15.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

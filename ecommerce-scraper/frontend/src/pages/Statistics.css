@@ -1,0 +1,298 @@
+/* ===============================
+   PREMIUM POWERBI DASHBOARD CSS
+   Statistics.css
+================================= */
+
+/* Page Wrapper */
+.statistics-page {
+  min-height: 100vh;
+  padding: 25px;
+  background: #f5f7fb;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Page Title */
+.statistics-page h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 18px;
+  color: #111827;
+  letter-spacing: 0.2px;
+}
+
+/* Section Titles */
+.statistics-page h3 {
+  margin-top: 22px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+/* ===============================
+   KPI GRID
+================================= */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 15px;
+  margin-top: 12px;
+  margin-bottom: 25px;
+}
+
+/* KPI Card */
+.kpi-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  border: 1px solid #eef2f7;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.05);
+  transition: 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* KPI Card Top Color Line */
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  background: linear-gradient(90deg, #2563eb, #9333ea);
+  opacity: 0.85;
+}
+
+.kpi-card span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.kpi-card h3 {
+  margin-top: 8px;
+  font-size: 22px;
+  font-weight: 900;
+  color: #111827;
+}
+
+/* KPI Sub text */
+.kpi-subtext {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+/* Hover */
+.kpi-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(37, 99, 235, 0.5);
+  box-shadow: 0px 10px 25px rgba(37, 99, 235, 0.12);
+}
+
+/* Clickable KPI */
+.clickable-kpi {
+  cursor: pointer;
+}
+
+/* ===============================
+   STATS SECTION BOX
+================================= */
+.stats-section {
+  margin-top: 22px;
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid #eef2f7;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+}
+
+/* Section Heading inside Box */
+.stats-section h3 {
+  margin-top: 0;
+  font-size: 17px;
+  font-weight: 900;
+  color: #111827;
+}
+
+/* ===============================
+   FILTER GRID (Search Area)
+================================= */
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.filter-grid input,
+.filter-grid select {
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  outline: none;
+  font-size: 14px;
+  font-weight: 600;
+  background: #f9fafb;
+  transition: 0.2s ease;
+}
+
+.filter-grid input:focus,
+.filter-grid select:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0px 0px 0px 4px rgba(37, 99, 235, 0.12);
+}
+
+/* Search Button */
+.filter-grid button {
+  padding: 11px 14px;
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.25s ease;
+}
+
+.filter-grid button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* ===============================
+   TABLE DESIGN
+================================= */
+.stats-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.stats-section table th,
+.stats-section table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.stats-section table th {
+  background: #f3f4f6;
+  font-weight: 900;
+  color: #111827;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.stats-section table tr:hover {
+  background: #f9fafb;
+}
+
+/* Clickable row */
+.clickable-row {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.clickable-row:hover {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+/* Clickable text */
+.clickable {
+  cursor: pointer;
+  font-weight: 800;
+  color: #2563eb;
+}
+
+.clickable:hover {
+  text-decoration: underline;
+}
+
+/* ===============================
+   DASHBOARD GRAPHS SECTION
+================================= */
+.graphs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 15px;
+  margin-top: 12px;
+}
+
+.graph-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid #eef2f7;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.05);
+  min-height: 280px;
+  transition: 0.25s ease;
+}
+
+.graph-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(124, 58, 237, 0.45);
+  box-shadow: 0px 12px 25px rgba(124, 58, 237, 0.15);
+}
+
+.graph-card h4 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 900;
+  color: #111827;
+}
+
+.graph-card p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* ===============================
+   LOADING STATE
+================================= */
+.stats-loading {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #374151;
+}
+
+/* ===============================
+   MOBILE RESPONSIVE
+================================= */
+@media (max-width: 768px) {
+  .statistics-page {
+    padding: 15px;
+  }
+
+  .statistics-page h2 {
+    font-size: 22px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .kpi-card h3 {
+    font-size: 18px;
+  }
+
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+}

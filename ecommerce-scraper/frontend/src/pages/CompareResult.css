@@ -1,0 +1,210 @@
+/* ===============================
+   COLOR THEME VARIABLES
+================================ */
+:root {
+  --primary-orange: #ff6a00;
+  --primary-orange-dark: #e85d00;
+  --light-orange: #fff3e8;
+  --text-dark: #212121;
+  --text-muted: #6c757d;
+  --border-light: #e6e6e6;
+  --bg-light: #f8f9fa;
+}
+
+/* ===============================
+   PAGE WRAPPER
+================================ */
+.container {
+  max-width: 1200px;
+}
+
+/* ===============================
+   BACK BUTTON
+================================ */
+.btn-link {
+  color: var(--primary-orange);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: var(--primary-orange-dark);
+  text-decoration: underline;
+}
+
+/* ===============================
+   PAGE TITLE
+================================ */
+h4 {
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* ===============================
+   TV CARD
+================================ */
+.tv-compare-card {
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: #fff;
+}
+
+.tv-compare-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   IMAGE
+================================ */
+.tv-image-wrapper {
+  height: 200px;
+  background: var(--bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  overflow: hidden;
+}
+
+.tv-image {
+  max-height: 170px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.tv-compare-card:hover .tv-image {
+  transform: scale(1.05);
+}
+
+/* ===============================
+   CARD BODY
+================================ */
+.card-body {
+  padding: 16px;
+}
+
+/* ===============================
+   TITLE
+================================ */
+.tv-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+/* ===============================
+   STAR RATING
+================================ */
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.star {
+  font-size: 14px;
+  color: #dcdcdc;
+}
+
+.star.filled {
+  color: var(--primary-orange);
+}
+
+.rating-text {
+  font-size: 12px;
+  margin-left: 6px;
+  color: var(--text-muted);
+}
+
+/* ===============================
+   BADGES
+================================ */
+.badge {
+  font-weight: 500;
+  font-size: 11px;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.bg-dark {
+  background-color: var(--text-dark) !important;
+}
+
+.bg-secondary {
+  background-color: #495057 !important;
+}
+
+/* ===============================
+   INFO TEXT
+================================ */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+/* ===============================
+   PRICE SECTION
+================================ */
+.price-box {
+  background: var(--light-orange);
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.best-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-orange);
+}
+
+.price-box del {
+  color: var(--text-muted);
+}
+
+.price-box .text-danger {
+  color: #d32f2f !important;
+}
+
+.price-box .text-success {
+  color: #2e7d32 !important;
+}
+
+/* ===============================
+   STOCK STATUS
+================================ */
+.badge.bg-success {
+  background-color: #2e7d32 !important;
+}
+
+.badge.bg-danger {
+  background-color: #d32f2f !important;
+}
+
+/* ===============================
+   ALERT
+================================ */
+.alert-warning {
+  background: var(--light-orange);
+  border: 1px solid var(--primary-orange);
+  color: var(--text-dark);
+  border-radius: 10px;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .tv-image-wrapper {
+    height: 180px;
+  }
+
+  .best-price {
+    font-size: 20px;
+  }
+}

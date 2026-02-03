@@ -1,0 +1,68 @@
+/* ================= PAGE ================= */
+.details-page {
+  min-height: 100vh;
+  padding: 32px 36px;
+  background: #f5f7fb;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #111827;
+}
+
+/* ================= GRID ================= */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+
+/* ================= CARD ================= */
+.detail-card {
+  background: #ffffff;
+  border-radius: 10px;                 /* less rounded, more professional */
+  padding: 18px 20px 22px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.detail-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* ================= TITLE ================= */
+.detail-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #1f2937;
+}
+
+/* ================= TEXT ================= */
+.detail-card p {
+  font-size: 14px;
+  margin: 6px 0;
+  color: #374151;
+}
+
+/* ================= LINK ================= */
+.detail-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 14px;
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.detail-card a:hover {
+  text-decoration: underline;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .details-page {
+    padding: 20px;
+  }
+}

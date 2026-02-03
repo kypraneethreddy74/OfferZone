@@ -1,0 +1,59 @@
+/* ================= HEATMAP TABLE ================= */
+.heatmap-wrap {
+  width: 100%;
+  overflow: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.heatmap-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.heatmap-table thead th {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(90deg, #fff7ed, #ffffff);
+  padding: 12px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #0f172a;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  text-align: left;
+}
+
+.heatmap-table tbody td {
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  color: #334155;
+}
+
+.heatmap-brand {
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.heatmap-cell {
+  text-align: center;
+  border-radius: 10px;
+}
+
+.heatmap-cell.warm {
+  background: rgba(251, 146, 60, 0.15);
+}
+
+.heatmap-cell.hot {
+  background: rgba(249, 115, 22, 0.28);
+  color: #0f172a;
+}
+
+.heatmap-note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 700;
+}

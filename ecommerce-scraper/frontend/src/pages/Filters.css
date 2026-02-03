@@ -1,0 +1,101 @@
+/* =============================
+   PAGE
+============================= */
+.filters-container {
+  padding: 24px;
+  background: #ffffff;
+  min-height: calc(100vh - 64px);
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* =============================
+   TITLE
+============================= */
+.filters-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #9a3412; /* dark orange */
+  margin-bottom: 16px;
+}
+
+/* =============================
+   FORM
+============================= */
+.filters-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filters-input {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #fed7aa; /* light orange border */
+  border-radius: 4px;
+}
+
+.filters-input:focus {
+  outline: none;
+  border-color: #f97316; /* orange focus */
+}
+
+.filters-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #f97316; /* orange button */
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filters-button:hover {
+  background: #ea580c; /* darker orange */
+}
+
+/* =============================
+   RESULTS
+============================= */
+.filters-results {
+  border-top: 1px solid #ffedd5; /* soft orange divider */
+  padding-top: 12px;
+}
+
+/* =============================
+   ROW
+============================= */
+.result-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 120px;
+  padding: 10px 4px;
+  font-size: 14px;
+  border-bottom: 1px solid #ffedd5;
+}
+
+.result-row:last-child {
+  border-bottom: none;
+}
+
+.brand {
+  font-weight: 600;
+  color: #f97316; /* orange brand */
+}
+
+.name {
+  color: #111827;
+}
+
+.price {
+  font-weight: 600;
+  color: #15803d; /* keep green for price */
+}
+
+/* =============================
+   EMPTY
+============================= */
+.empty-text {
+  font-size: 14px;
+  color: #6b7280;
+}
